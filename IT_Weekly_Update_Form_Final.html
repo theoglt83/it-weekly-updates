@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Update | Partners BHM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --brand-primary: #002F6C; --brand-secondary: #007749; --success: #0d9488; --success-light: #ccfbf1; --warning: #d97706; --warning-light: #fef3c7; --error: #dc2626; --error-light: #fee2e2; --info: #0284c7; --info-light: #e0f2fe; --white: #fff; --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280; --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827; --font: 'Inter', system-ui, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); font-size: 14px; line-height: 1.5; color: var(--gray-800); background: var(--gray-100); }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .header { background: var(--brand-primary); color: white; padding: 16px 0; border-bottom: 4px solid var(--brand-secondary); }
+        .header-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .header-brand { display: flex; align-items: center; gap: 12px; }
+        .header-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .header-icon svg { width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 2; }
+        .header h1 { font-size: 18px; font-weight: 700; }
+        .header p { font-size: 12px; opacity: 0.8; }
+        .header-meta { text-align: right; }
+        .header-meta .week { font-size: 14px; font-weight: 600; }
+        .header-meta .status { font-size: 11px; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-top: 4px; }
+        .header-meta .status.demo { background: var(--warning-light); color: var(--warning); }
+        .header-meta .status.live { background: var(--success-light); color: var(--success); }
+        .header-meta .status.error { background: var(--error-light); color: var(--error); }
+        .main { padding: 24px 0; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+        .stat { background: white; border-radius: 10px; padding: 16px; border: 1px solid var(--gray-200); display: flex; align-items: center; gap: 12px; }
+        .stat-icon { width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .stat-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .stat-icon.blue { background: var(--info-light); color: var(--info); }
+        .stat-icon.green { background: var(--success-light); color: var(--success); }
+        .stat-icon.red { background: var(--error-light); color: var(--error); }
+        .stat-icon.yellow { background: var(--warning-light); color: var(--warning); }
+        .stat-value { font-size: 28px; font-weight: 700; color: var(--gray-900); }
+        .stat-label { font-size: 12px; color: var(--gray-500); }
+        .card { background: white; border-radius: 12px; border: 1px solid var(--gray-200); margin-bottom: 20px; overflow: hidden; }
+        .card-header { padding: 16px 20px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .card-header h2 { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+        .card-header p { font-size: 12px; color: var(--gray-500); }
+        .card-body { padding: 20px; }
+        .card-footer { padding: 16px 20px; background: var(--gray-50); border-top: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .tabs { display: inline-flex; background: var(--gray-200); padding: 4px; border-radius: 8px; }
+        .tab { padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--gray-600); background: none; border: none; border-radius: 6px; cursor: pointer; }
+        .tab:hover { color: var(--gray-800); }
+        .tab.active { background: white; color: var(--brand-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .form-row { display: grid; gap: 16px; margin-bottom: 16px; }
+        .form-row.two { grid-template-columns: 1fr 1fr; }
+        .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+        .form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; }
+        .form-group label .req { color: var(--error); }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 10px 12px; font-family: inherit; font-size: 14px; color: var(--gray-900); background: white; border: 1px solid var(--gray-300); border-radius: 6px; outline: none; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--brand-primary); box-shadow: 0 0 0 3px rgba(0,47,108,0.1); }
+        .form-select { cursor: pointer; }
+        .form-textarea { min-height: 80px; resize: vertical; }
+        .progress-section { margin-bottom: 16px; }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .progress-value { font-size: 20px; font-weight: 700; color: var(--brand-secondary); }
+        .progress-track { height: 8px; background: var(--gray-200); border-radius: 4px; position: relative; overflow: hidden; }
+        .progress-fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--brand-secondary); border-radius: 4px; transition: width 0.2s; }
+        .progress-slider { width: 100%; margin-top: -4px; position: relative; z-index: 2; -webkit-appearance: none; background: transparent; cursor: pointer; height: 16px; }
+        .progress-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: white; border: 2px solid var(--brand-secondary); border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.2); cursor: pointer; }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--gray-400); margin-top: 4px; }
+        .blocker-box { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+        .blocker-box.active { background: var(--error-light); border-color: #fca5a5; }
+        .blocker-header { display: flex; justify-content: space-between; align-items: center; }
+        .blocker-label { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--gray-700); }
+        .blocker-box.active .blocker-label { color: var(--error); }
+        .blocker-label svg { width: 18px; height: 18px; stroke: currentColor; fill: none; }
+        .blocker-hint { font-size: 12px; color: var(--gray-500); margin-top: 2px; margin-left: 26px; }
+        .switch { position: relative; width: 48px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .switch-slider { position: absolute; inset: 0; background: var(--gray-300); border-radius: 26px; cursor: pointer; transition: 0.2s; }
+        .switch-slider:before { content: ''; position: absolute; width: 20px; height: 20px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+        .switch input:checked + .switch-slider { background: var(--error); }
+        .switch input:checked + .switch-slider:before { transform: translateX(22px); }
+        .blocker-content { margin-top: 16px; padding-top: 16px; border-top: 1px solid #fca5a5; display: none; }
+        .blocker-box.active .blocker-content { display: block; }
+        .resolution-box { display: none; }
+        .resolution-box.show { display: block; }
+        .resolution-box .form-textarea { background: var(--success-light); border-color: #5eead4; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 20px; font-family: inherit; font-size: 14px; font-weight: 500; border-radius: 6px; border: none; cursor: pointer; transition: 0.15s; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary { background: var(--brand-secondary); color: white; }
+        .btn-primary:hover:not(:disabled) { background: #005c38; }
+        .btn-secondary { background: white; color: var(--gray-700); border: 1px solid var(--gray-300); }
+        .btn-secondary:hover:not(:disabled) { background: var(--gray-50); }
+        .btn-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .badge { padding: 6px 12px; background: rgba(0,47,108,0.1); color: var(--brand-primary); border-radius: 6px; font-size: 12px; font-weight: 600; }
+        .errors { background: var(--error-light); border: 1px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: none; }
+        .errors.show { display: block; }
+        .errors ul { list-style: none; }
+        .errors li { font-size: 13px; color: #b91c1c; padding: 2px 0; }
+        .recent-list { list-style: none; }
+        .recent-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--gray-100); cursor: pointer; }
+        .recent-item:hover { background: var(--gray-50); }
+        .recent-item:last-child { border-bottom: none; }
+        .recent-left { display: flex; align-items: center; gap: 10px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot.active { background: var(--brand-primary); }
+        .dot.done { background: var(--brand-secondary); }
+        .dot.blocked { background: var(--error); }
+        .recent-title { font-size: 13px; font-weight: 500; color: var(--gray-800); }
+        .recent-meta { font-size: 11px; color: var(--gray-500); }
+        .recent-right { display: flex; align-items: center; gap: 8px; }
+        .mini-bar { width: 50px; height: 4px; background: var(--gray-200); border-radius: 2px; overflow: hidden; }
+        .mini-fill { height: 100%; border-radius: 2px; }
+        .mini-fill.active { background: var(--brand-primary); }
+        .mini-fill.done { background: var(--brand-secondary); }
+        .pct { font-size: 11px; font-weight: 600; color: var(--gray-600); min-width: 32px; text-align: right; }
+        .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; place-items: center; z-index: 100; }
+        .modal-bg.show { display: grid; }
+        .modal { background: white; border-radius: 12px; max-width: 400px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .modal-body { padding: 20px; }
+        .modal-body h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+        .modal-body p { font-size: 14px; color: var(--gray-600); }
+        .modal-footer { padding: 12px 20px; background: var(--gray-50); display: flex; justify-content: flex-end; gap: 8px; border-radius: 0 0 12px 12px; }
+        .toast-box { position: fixed; top: 16px; right: 16px; z-index: 200; }
+        .toast { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 8px; animation: slideIn 0.3s ease; min-width: 280px; }
+        .toast.success { border-left: 4px solid var(--brand-secondary); }
+        .toast.error { border-left: 4px solid var(--error); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .note { font-size: 12px; color: var(--gray-500); }
+        .note span { color: var(--error); }
+        @media (max-width: 768px) { .stats { grid-template-columns: repeat(2, 1fr); } .form-row.two, .form-row.three { grid-template-columns: 1fr; } }
+        @media (max-width: 480px) { .stats { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="header"><div class="container"><div class="header-inner"><div class="header-brand"><div class="header-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div><h1>IT Weekly Update</h1><p>Partners Behavioral Health Management</p></div></div><div class="header-meta"><div class="week" id="weekLabel">Loading...</div><div class="status demo" id="statusLabel">Initializing...</div></div></div></div></header>
+    <main class="main"><div class="container">
+        <div class="stats">
+            <div class="stat"><div class="stat-icon blue"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div><div><div class="stat-value" id="statSubmitted">0</div><div class="stat-label">Submitted</div></div></div>
+            <div class="stat"><div class="stat-icon green"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><div class="stat-value" id="statActive">0</div><div class="stat-label">In Progress</div></div></div>
+            <div class="stat"><div class="stat-icon red"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div><div class="stat-value" id="statBlocked">0</div><div class="stat-label">Blocked</div></div></div>
+            <div class="stat"><div class="stat-icon yellow"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><div><div class="stat-value" id="statDone">0</div><div class="stat-label">Completed</div></div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><div><h2>Work Item Details</h2><p>Update existing or create new</p></div><div class="tabs"><button type="button" class="tab active" id="tabExisting">Existing</button><button type="button" class="tab" id="tabNew">New Item</button></div></div>
+            <div class="card-body">
+                <div class="errors" id="errorBox"><ul id="errorList"></ul></div>
+                <div class="form-row"><div class="form-group"><label>Title <span class="req">*</span></label><select class="form-select" id="titleSelect"><option value="">Select a work item...</option></select><input type="text" class="form-input" id="titleInput" placeholder="Enter title..." style="display:none;"></div></div>
+                <div class="form-row two">
+                    <div class="form-group"><label>Workstream <span class="req">*</span></label>
+                        <select class="form-select" id="workstreamSelect">
+                            <option value="">Select workstream...</option>
+                            <option value="Authorizations">Authorizations</option>
+                            <option value="Benefits">Benefits</option>
+                            <option value="Claims">Claims</option>
+                            <option value="EDI">EDI</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Groups/Members">Groups/Members</option>
+                            <option value="Pharmacy">Pharmacy</option>
+                            <option value="Portals">Portals</option>
+                            <option value="Providers">Providers</option>
+                            <option value="Reports">Reports</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Category <span class="req">*</span></label>
+                        <select class="form-select" id="categorySelect">
+                            <option value="">Select category...</option>
+                            <option value="Administrative">Administrative</option>
+                            <option value="Data Extract">Data Extract</option>
+                            <option value="Incident">Incident</option>
+                            <option value="Integration">Integration</option>
+                            <option value="Reports - Business">Reports - Business</option>
+                            <option value="Reports - State">Reports - State</option>
+                            <option value="Requirements">Requirements</option>
+                            <option value="Testing">Testing</option>
+                            <option value="Training">Training</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row two"><div class="form-group"><label>Status <span class="req">*</span></label><select class="form-select" id="statusSelect"><option value="Newly Assigned">Newly Assigned</option><option value="In Progress">In Progress</option><option value="Closed">Closed</option><option value="Deferred">Deferred</option><option value="Cancelled">Cancelled</option></select></div><div class="form-group"><label>Priority <span class="req">*</span></label><select class="form-select" id="prioritySelect"><option value="High">High</option><option value="Medium" selected>Medium</option><option value="Low">Low</option></select></div></div>
+                <div class="progress-section"><div class="progress-header"><label>Progress</label><div class="progress-value" id="progressVal">0%</div></div><div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div><input type="range" class="progress-slider" id="progressSlider" min="0" max="100" value="0"><div class="progress-labels"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div></div>
+                <div class="form-row three"><div class="form-group"><label>Expected Completion</label><input type="date" class="form-input" id="expectedDate"></div><div class="form-group"><label>Est. Hours</label><input type="number" class="form-input" id="estHours" placeholder="0" min="0"></div><div class="form-group"><label>Related Project</label><input type="text" class="form-input" id="relatedProject" placeholder="Project name"></div></div>
+                <div class="blocker-box" id="blockerBox"><div class="blocker-header"><div><div class="blocker-label"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Is this item blocked?</div><div class="blocker-hint">Flag items that need escalation</div></div><label class="switch"><input type="checkbox" id="blockerSwitch"><span class="switch-slider"></span></label></div><div class="blocker-content"><div class="form-group"><label style="color:var(--error)">Blocker Description <span class="req">*</span></label><textarea class="form-textarea" id="blockerDesc" placeholder="What's blocking progress?"></textarea></div></div></div>
+                <div class="form-row two"><div class="form-group"><label>Weekly Notes</label><textarea class="form-textarea" id="notesInput" placeholder="Progress this week..."></textarea></div><div class="form-group resolution-box" id="resolutionBox"><label style="color:var(--brand-secondary)">Resolution Notes <span class="req">*</span></label><textarea class="form-textarea" id="resolutionNotes" placeholder="How was this resolved?"></textarea></div></div>
+            </div>
+            <div class="card-footer"><span class="note"><span>*</span> Required</span><div class="btn-group"><div class="badge">This Week: <span id="weekCount">0</span></div><button type="button" class="btn btn-secondary" id="clearBtn">Clear</button><button type="button" class="btn btn-primary" id="submitBtn">Submit Update</button></div></div>
+        </div>
+        <div class="card"><div class="card-header"><h2>Recent Submissions</h2></div><ul class="recent-list" id="recentList"><li class="recent-item" style="justify-content:center;color:var(--gray-400);cursor:default;">Loading...</li></ul></div>
+    </div></main>
+    <div class="modal-bg" id="modalBg"><div class="modal"><div class="modal-body"><h3>Reopen Closed Item?</h3><p>This item is closed. Reopening sets status to "In Progress".</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" id="modalNo">Cancel</button><button type="button" class="btn btn-primary" id="modalYes">Reopen</button></div></div></div>
+    <div class="toast-box" id="toastBox"></div>
+    <script>
+    (function() {
+        var CONFIG = {
+            FLOW_GET_ITEMS: 'https://defaulte1bad38e94944e81b389cde8c53106.3b.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e74c14895a7b425fad95b52f45ce110c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8HyIrWAaju3KQaJGoXoJ-TLSq36ShAA8q02QSIf-kJ4',
+            FLOW_SUBMIT: 'https://defaulte1bad38e94944e81b389cde8c53106.3b.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/b98a5f7db7c54b6b8d17667e79583e49/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hk0Jr8SpuIGNGiHGwB0MW2nLOPuqsuS0jt6CBppkJOs',
+            USE_LIVE_DATA: true
+        };
+        
+        var state = { isNew: false, items: [], selected: null, submitted: 0 };
+        var $weekLabel, $statusLabel, $statSubmitted, $statActive, $statBlocked, $statDone;
+        var $tabExisting, $tabNew, $titleSelect, $titleInput;
+        var $workstreamSelect, $categorySelect, $statusSelect, $prioritySelect;
+        var $progressSlider, $progressVal, $progressFill;
+        var $expectedDate, $estHours, $relatedProject;
+        var $blockerBox, $blockerSwitch, $blockerDesc;
+        var $notesInput, $resolutionBox, $resolutionNotes;
+        var $errorBox, $errorList, $clearBtn, $submitBtn, $weekCount;
+        var $recentList, $modalBg, $modalNo, $modalYes, $toastBox;
+        
+        function getMonday(d) { var date = new Date(d); var day = date.getDay(); return new Date(date.setDate(date.getDate() - day + (day === 0 ? -6 : 1))); }
+        function formatDate(d) { var m = ['January','February','March','April','May','June','July','August','September','October','November','December']; return m[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+        function toast(msg, type) { var t = document.createElement('div'); t.className = 'toast ' + (type || 'success'); t.innerHTML = '<span>' + msg + '</span>'; $toastBox.appendChild(t); setTimeout(function() { t.remove(); }, 4000); }
+        
+        function loadData() {
+            if (CONFIG.USE_LIVE_DATA) {
+                $statusLabel.textContent = 'Connecting...';
+                $statusLabel.className = 'status demo';
+                
+                fetch(CONFIG.FLOW_GET_ITEMS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userEmail: 'user@partnersbhm.org' }) })
+                .then(function(res) { return res.json(); })
+                .then(function(data) { 
+                    var items = Array.isArray(data) ? data : (data.value || []);
+                    state.items = items;
+                    $statusLabel.textContent = 'Live'; 
+                    $statusLabel.className = 'status live'; 
+                    updateUI(); 
+                })
+                .catch(function(err) { 
+                    console.error('Flow error:', err); 
+                    $statusLabel.textContent = 'Demo Mode'; 
+                    $statusLabel.className = 'status demo'; 
+                    loadMockData(); 
+                });
+            } else { 
+                loadMockData(); 
+            }
+        }
+        
+        function loadMockData() {
+            state.items = [
+                { Id: 1, Title: 'Claims Adjudication Engine Update', Workstream: 'Claims', Category: 'Integration', Status: 'In Progress', PercentComplete: 65, Priority: 'High', IsBlocked: false },
+                { Id: 2, Title: 'Provider Portal Auth Fix', Workstream: 'Portals', Category: 'Incident', Status: 'In Progress', PercentComplete: 80, Priority: 'Medium', IsBlocked: true, BlockerDescription: 'Waiting on security team' },
+                { Id: 3, Title: 'Benefits Config Review', Workstream: 'Benefits', Category: 'Administrative', Status: 'Closed', PercentComplete: 100, Priority: 'Low', IsBlocked: false },
+                { Id: 4, Title: 'IRIS State Report Update', Workstream: 'Reports', Category: 'Reports - State', Status: 'In Progress', PercentComplete: 35, Priority: 'High', IsBlocked: false }
+            ];
+            $statusLabel.textContent = 'Demo Mode'; 
+            $statusLabel.className = 'status demo'; 
+            updateUI();
+        }
+        
+        function updateUI() { updateTitleDropdown(); updateRecentList(); updateStats(); }
+        
+        function getVal(item, field) {
+            var v = item[field];
+            if (!v) return '';
+            if (typeof v === 'object' && v.Value) return v.Value;
+            return v;
+        }
+        
+        function updateTitleDropdown() {
+            var html = '<option value="">Select a work item...</option>';
+            for (var i = 0; i < state.items.length; i++) {
+                var item = state.items[i]; 
+                var title = item.Title || '';
+                var ws = getVal(item, 'Workstream');
+                var status = getVal(item, 'Status');
+                var tag = status === 'Closed' ? ' [CLOSED]' : '';
+                html += '<option value="' + title + '">' + title + ' (' + ws + ')' + tag + '</option>';
+            }
+            $titleSelect.innerHTML = html;
+        }
+        
+        function updateRecentList() {
+            if (state.items.length === 0) { 
+                $recentList.innerHTML = '<li class="recent-item" style="justify-content:center;color:var(--gray-400);cursor:default;">No items</li>'; 
+                return; 
+            }
+            var html = '';
+            for (var i = 0; i < state.items.length; i++) {
+                var item = state.items[i];
+                var title = item.Title || 'Untitled';
+                var ws = getVal(item, 'Workstream');
+                var status = getVal(item, 'Status');
+                var pct = parseInt(item.PercentComplete) || 0;
+                var isBlocked = item.IsBlocked === true || item.IsBlocked === 'true';
+                var dotClass = status === 'Closed' ? 'done' : (isBlocked ? 'blocked' : 'active');
+                var fillClass = status === 'Closed' ? 'done' : 'active';
+                var pctText = status === 'Closed' ? 'Done' : pct + '%';
+                html += '<li class="recent-item" data-id="' + (item.Id || item.ID || i) + '"><div class="recent-left"><div class="dot ' + dotClass + '"></div><div><div class="recent-title">' + title + '</div><div class="recent-meta">' + ws + ' - ' + status + '</div></div></div><div class="recent-right"><div class="mini-bar"><div class="mini-fill ' + fillClass + '" style="width:' + pct + '%"></div></div><div class="pct">' + pctText + '</div></div></li>';
+            }
+            $recentList.innerHTML = html;
+        }
+        
+        function updateStats() {
+            var active = 0, blocked = 0, done = 0;
+            for (var i = 0; i < state.items.length; i++) { 
+                var status = getVal(state.items[i], 'Status');
+                var isBlocked = state.items[i].IsBlocked === true || state.items[i].IsBlocked === 'true';
+                if (status === 'In Progress') active++; 
+                if (isBlocked) blocked++; 
+                if (status === 'Closed') done++; 
+            }
+            $statSubmitted.textContent = state.submitted; 
+            $statActive.textContent = active; 
+            $statBlocked.textContent = blocked; 
+            $statDone.textContent = done; 
+            $weekCount.textContent = state.submitted;
+        }
+        
+        function updateProgress(val) { $progressVal.textContent = val + '%'; $progressFill.style.width = val + '%'; }
+        function updateResolution() { if ($statusSelect.value === 'Closed' || $statusSelect.value === 'Cancelled') { $resolutionBox.classList.add('show'); } else { $resolutionBox.classList.remove('show'); } }
+        
+        function populateForm(item) {
+            $workstreamSelect.value = getVal(item, 'Workstream'); 
+            $categorySelect.value = getVal(item, 'Category');
+            $statusSelect.value = getVal(item, 'Status') || 'Newly Assigned'; 
+            $prioritySelect.value = getVal(item, 'Priority') || 'Medium';
+            var pct = parseInt(item.PercentComplete) || 0;
+            $progressSlider.value = pct; 
+            updateProgress(pct);
+            $expectedDate.value = item.ExpectedCompletionDate || ''; 
+            $estHours.value = item.EstimatedHours || '';
+            $relatedProject.value = item.RelatedProject || ''; 
+            var isBlocked = item.IsBlocked === true || item.IsBlocked === 'true';
+            $blockerSwitch.checked = isBlocked;
+            $blockerDesc.value = item.BlockerDescription || '';
+            if (isBlocked) { $blockerBox.classList.add('active'); } else { $blockerBox.classList.remove('active'); }
+            updateResolution();
+        }
+        
+        function clearForm() {
+            state.isNew = false; state.selected = null;
+            $tabExisting.classList.add('active'); $tabNew.classList.remove('active');
+            $titleSelect.style.display = ''; $titleInput.style.display = 'none';
+            $titleSelect.value = ''; $titleInput.value = '';
+            $workstreamSelect.value = ''; $categorySelect.value = '';
+            $statusSelect.value = 'Newly Assigned'; $prioritySelect.value = 'Medium';
+            $progressSlider.value = 0; updateProgress(0);
+            $expectedDate.value = ''; $estHours.value = ''; $relatedProject.value = '';
+            $blockerSwitch.checked = false; $blockerBox.classList.remove('active'); $blockerDesc.value = '';
+            $notesInput.value = ''; $resolutionNotes.value = '';
+            $resolutionBox.classList.remove('show'); $errorBox.classList.remove('show');
+        }
+        
+        function collectData() {
+            return {
+                Title: state.isNew ? $titleInput.value : $titleSelect.value,
+                Workstream: $workstreamSelect.value, 
+                Category: $categorySelect.value,
+                Status: $statusSelect.value, 
+                Priority: $prioritySelect.value,
+                PercentComplete: parseInt($progressSlider.value, 10),
+                ExpectedCompletionDate: $expectedDate.value,
+                EstimatedHours: $estHours.value ? parseInt($estHours.value, 10) : null,
+                RelatedProject: $relatedProject.value, 
+                IsBlocked: $blockerSwitch.checked,
+                BlockerDescription: $blockerSwitch.checked ? $blockerDesc.value : '',
+                Notes: $notesInput.value,
+                ResolutionNotes: ($statusSelect.value === 'Closed' || $statusSelect.value === 'Cancelled') ? $resolutionNotes.value : ''
+            };
+        }
+        
+        function validate(data) {
+            var errors = [];
+            if (!data.Title || data.Title.length < 3) errors.push('Title required (min 3 chars)');
+            if (!data.Workstream) errors.push('Workstream required');
+            if (!data.Category) errors.push('Category required');
+            if (data.IsBlocked && (!data.BlockerDescription || data.BlockerDescription.length < 5)) errors.push('Blocker description required');
+            if ((data.Status === 'Closed' || data.Status === 'Cancelled') && (!data.ResolutionNotes || data.ResolutionNotes.length < 5)) errors.push('Resolution notes required');
+            if (errors.length > 0) { 
+                var html = ''; 
+                for (var i = 0; i < errors.length; i++) html += '<li>' + errors[i] + '</li>'; 
+                $errorList.innerHTML = html; 
+                $errorBox.classList.add('show'); 
+                return false; 
+            }
+            $errorBox.classList.remove('show'); 
+            return true;
+        }
+        
+        function submitForm() {
+            var data = collectData(); 
+            if (!validate(data)) return;
+            $submitBtn.disabled = true; 
+            $submitBtn.innerHTML = '<div class="spinner"></div> Submitting...';
+            
+            if (CONFIG.USE_LIVE_DATA) {
+                fetch(CONFIG.FLOW_SUBMIT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+                .then(function(res) { 
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    state.submitted++; 
+                    updateStats(); 
+                    toast('Submitted successfully!', 'success'); 
+                    clearForm();
+                    loadData();
+                })
+                .catch(function(err) { 
+                    console.error('Submit error:', err);
+                    toast('Submit failed: ' + err.message, 'error'); 
+                })
+                .finally(function() { 
+                    $submitBtn.disabled = false; 
+                    $submitBtn.innerHTML = 'Submit Update'; 
+                });
+            } else {
+                setTimeout(function() { 
+                    state.submitted++; 
+                    updateStats(); 
+                    toast('Submitted! (Demo Mode)', 'success'); 
+                    clearForm(); 
+                    $submitBtn.disabled = false; 
+                    $submitBtn.innerHTML = 'Submit Update'; 
+                }, 800);
+            }
+        }
+        
+        function setupEvents() {
+            $tabExisting.onclick = function() { state.isNew = false; $tabExisting.classList.add('active'); $tabNew.classList.remove('active'); $titleSelect.style.display = ''; $titleInput.style.display = 'none'; };
+            $tabNew.onclick = function() { state.isNew = true; $tabNew.classList.add('active'); $tabExisting.classList.remove('active'); $titleInput.style.display = ''; $titleSelect.style.display = 'none'; $titleInput.value = ''; };
+            
+            $titleSelect.onchange = function() { 
+                var title = $titleSelect.value; 
+                if (!title) return; 
+                var item = null; 
+                for (var i = 0; i < state.items.length; i++) { 
+                    if (state.items[i].Title === title) { item = state.items[i]; break; } 
+                } 
+                if (item) { 
+                    state.selected = item; 
+                    var status = getVal(item, 'Status');
+                    if (status === 'Closed') { $modalBg.classList.add('show'); } 
+                    else { populateForm(item); } 
+                } 
+            };
+            
+            $progressSlider.oninput = function() { updateProgress($progressSlider.value); };
+            $statusSelect.onchange = updateResolution;
+            $blockerSwitch.onchange = function() { if ($blockerSwitch.checked) { $blockerBox.classList.add('active'); } else { $blockerBox.classList.remove('active'); } };
+            $clearBtn.onclick = clearForm;
+            $submitBtn.onclick = submitForm;
+            $modalNo.onclick = function() { $modalBg.classList.remove('show'); $titleSelect.value = ''; state.selected = null; };
+            $modalYes.onclick = function() { $modalBg.classList.remove('show'); if (state.selected) { populateForm(state.selected); $statusSelect.value = 'In Progress'; updateResolution(); } };
+            
+            $recentList.onclick = function(e) { 
+                var li = e.target.closest('.recent-item'); 
+                if (!li || !li.dataset.id) return; 
+                var id = li.dataset.id;
+                var item = null; 
+                for (var i = 0; i < state.items.length; i++) { 
+                    var itemId = state.items[i].Id || state.items[i].ID || i;
+                    if (String(itemId) === String(id)) { item = state.items[i]; break; } 
+                } 
+                if (item) { 
+                    state.isNew = false; 
+                    $tabExisting.classList.add('active'); 
+                    $tabNew.classList.remove('active'); 
+                    $titleSelect.style.display = ''; 
+                    $titleInput.style.display = 'none'; 
+                    $titleSelect.value = item.Title; 
+                    state.selected = item; 
+                    var status = getVal(item, 'Status');
+                    if (status === 'Closed') { $modalBg.classList.add('show'); } 
+                    else { populateForm(item); } 
+                    document.querySelector('.card').scrollIntoView({ behavior: 'smooth' }); 
+                } 
+            };
+        }
+        
+        function init() {
+            try {
+                $weekLabel = document.getElementById('weekLabel'); 
+                $statusLabel = document.getElementById('statusLabel');
+                $statSubmitted = document.getElementById('statSubmitted'); 
+                $statActive = document.getElementById('statActive');
+                $statBlocked = document.getElementById('statBlocked'); 
+                $statDone = document.getElementById('statDone');
+                $tabExisting = document.getElementById('tabExisting'); 
+                $tabNew = document.getElementById('tabNew');
+                $titleSelect = document.getElementById('titleSelect'); 
+                $titleInput = document.getElementById('titleInput');
+                $workstreamSelect = document.getElementById('workstreamSelect'); 
+                $categorySelect = document.getElementById('categorySelect');
+                $statusSelect = document.getElementById('statusSelect'); 
+                $prioritySelect = document.getElementById('prioritySelect');
+                $progressSlider = document.getElementById('progressSlider'); 
+                $progressVal = document.getElementById('progressVal');
+                $progressFill = document.getElementById('progressFill'); 
+                $expectedDate = document.getElementById('expectedDate');
+                $estHours = document.getElementById('estHours'); 
+                $relatedProject = document.getElementById('relatedProject');
+                $blockerBox = document.getElementById('blockerBox'); 
+                $blockerSwitch = document.getElementById('blockerSwitch');
+                $blockerDesc = document.getElementById('blockerDesc'); 
+                $notesInput = document.getElementById('notesInput');
+                $resolutionBox = document.getElementById('resolutionBox'); 
+                $resolutionNotes = document.getElementById('resolutionNotes');
+                $errorBox = document.getElementById('errorBox'); 
+                $errorList = document.getElementById('errorList');
+                $clearBtn = document.getElementById('clearBtn'); 
+                $submitBtn = document.getElementById('submitBtn');
+                $weekCount = document.getElementById('weekCount'); 
+                $recentList = document.getElementById('recentList');
+                $modalBg = document.getElementById('modalBg'); 
+                $modalNo = document.getElementById('modalNo');
+                $modalYes = document.getElementById('modalYes'); 
+                $toastBox = document.getElementById('toastBox');
+                
+                $weekLabel.textContent = 'Week of ' + formatDate(getMonday(new Date()));
+                var twoWeeks = new Date(); 
+                twoWeeks.setDate(twoWeeks.getDate() + 14); 
+                $expectedDate.value = twoWeeks.toISOString().split('T')[0];
+                
+                setupEvents(); 
+                loadData();
+            } catch(err) {
+                console.error('Init error:', err);
+            }
+        }
+        
+        if (document.readyState === 'loading') { 
+            document.addEventListener('DOMContentLoaded', init); 
+        } else { 
+            init(); 
+        }
+    })();
+    </script>
+</body>
+</html>
